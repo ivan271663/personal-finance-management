@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Транзакции</h1>
+
+    <!-- Форма добавления -->
+    <form method='POST' class="transaction-form" action="/transactions">
+        <input type="number" name="amount" placeholder="Сумма" required step="10">
+        <select name="category" required>
+            <option value="">Выберите категорию</option>
+            <option value="Зарплата">Зарплата</option>
+            <option value="Подарки">Подарки</option>
+            <option value="Продукты">Продукты</option>
+            <option value="Транспорт">Транспорт</option>
+            <option value="Развлечения">Развлечения</option>
+            <option value="Другое">Другое</option>
+        </select>
+        <select name="type" required>
+            <option value="income">Доход</option>
+            <option value="expense">Расход</option>
+        </select>
+        <button type="submit">Добавить</button>
+    </form>
+
+    <!-- Список транзакций -->
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Тип</th>
+                <th>Категория</th>
+                <th>Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction[4] }}</td>
+                <td>{{ "Доход" if transaction[3] == "income" else "Расход" }}</td>
+                <td>{{ transaction[2] }}</td>
+                <td>{{ "%.2f"|format(transaction[1]) }} ₽</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

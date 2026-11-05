@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Личные финансы</h1>
+    <p>Отслеживайте свои доходы и расходы.</p>
+    <div class="buttons">
+        <a href="{{ url_for('transactions') }}" class="btn">Добавить транзакцию</a>
+        <a href="{{ url_for('statistics') }}" class="btn">Посмотреть статистику</a>
+    </div>
+</div>
+{% endblock %}

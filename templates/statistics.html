@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Статистика за месяц</h1>
+
+    <!-- Блок с общей информацией -->
+    <div class="summary">
+        {% if expenses %}
+        <p>Всего категорий расходов: {{ expenses|length }}</p>
+        <p>Общий объём расходов за месяц: {{ "%.2f"|format(expenses|sum(attribute='amount')) }} ₽</p>
+        {% else %}
+        <p>За последний месяц расходов не зафиксировано.</p>
+        {% endif %}
+    </div>
+
+    <!-- Диаграмма расходов -->
+    {% if chart_url %}
+    <div class="chart-section">
+        <h2>Распределение расходов по категориям</h2>
+        <img src="{{ chart_url }}" alt="Круговая диаграмма расходов за месяц" class="pie-chart">
+    </div>
+    {% endif %}
+
+    <!-- Таблица с детализацией по категориям -->
+    {% if expenses %}
+    <div class="expense-table">
+        <h3>Детализация по категориям</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Категория</th>
+                    <th>Сумма (₽)</th>
+                    <th>Доля (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set total = expenses|sum(attribute='amount') %}
+                {% for item in expenses %}
+                <tr>
+                    <td>{{ item.category }}</td>
+                    <td>{{ "%.2f"|format(item.amount) }}</td>
+                    <td>
+                        {% if total > 0 %}
+                        {{ "%.1f"|format((item.amount / total) * 100) }}%
+                        {% else %}
+                        0.0%
+
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+
+    {% if chart_url1 %}
+    <div class="chart-section">
+        <h2>Распределение доходов по категориям</h2>
+        <img src="{{ chart_url1 }}" alt="Круговая диаграмма доходов за месяц" class="pie-chart">
+    </div>
+    {% endif %}
+
+    <!-- Таблица с детализацией по категориям -->
+    {% if incomes %}
+    <div class="incomes-table">
+        <h3>Детализация по категориям</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Категория</th>
+                    <th>Сумма (₽)</th>
+                    <th>Доля (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set total = incomes|sum(attribute='amount') %}
+                {% for item in incomes %}
+                <tr>
+                    <td>{{ item.category }}</td>
+                    <td>{{ "%.2f"|format(item.amount) }}</td>
+                    <td>
+                        {% if total > 0 %}
+                        {{ "%.1f"|format((item.amount / total) * 100) }}%
+                        {% else %}
+                        0.0%
+
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Кнопка возврата -->
+    <div class="actions">
+        <a href="{{ url_for('transactions') }}" class="btn">Добавить новую транзакцию</a>
+        <a href="{{ url_for('index') }}" class="btn secondary">На главную</a>
+    </div>
+</div>
+{% endblock %}
